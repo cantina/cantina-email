@@ -3,16 +3,68 @@ cantina-emails
 
 Email sending and templating for Cantina applications.
 
-[![build status](https://secure.travis-ci.org/cpsubrian/cantina-emails.png)](http://travis-ci.org/cpsubrian/cantina-emails)
 
+Provides
+--------
 
+- **app.emails.send (name, vars, cb)** - Send an email using a named template.
+
+Hooks
+-----
+
+- **emails:send:before (name, vars, cb)** - An email is about to be sent. you can
+  modify the variables by reference.
+- **emails:send:after (name, vars, email, response, cb)** - An email was just
+  sent.
+
+Configuration
+-------------
+
+**Defaults**
+
+```js
+emails: {
+  transport: 'Stub',
+  templates: {
+    root: './emails/templates'
+  }
+}
+```
+
+Templates
+---------
+
+Templates are markdown files with yaml front-matter.
+
+**Example:**
+
+```md
+---
+to: '{{{to.name}}} <{{{to.email}}}>'
+from: '{{{from.name}}} <{{{from.email}}}>'
+subject: 'Cantina Emails: Example'
+---
+Hey {{to.name}},
+
+This is an example of cantina-emails. It is the most {{adjective}} email sending
+module out there.
+
+Regards,
+{{from.name}}
+
+--
+Sent by Cantina
+```
+
+**Note:** The variables can be whatever you want. In the example above we've
+used `vars.to` and `vars.from` to store the sender and recipient info, but it
+could have just as easily been fetched from `vars.user.username` etc.
 
 - - -
 
-### Developed by [TerraEclipse](https://github.com/TerraEclipse)
-
+### Developed by [Terra Eclipse](http://www.terraeclipse.com)
 Terra Eclipse, Inc. is a nationally recognized political technology and
-strategy firm located in Santa Cruz, CA and Washington, D.C.
+strategy firm located in Aptos, CA and Washington, D.C.
 
 - - -
 

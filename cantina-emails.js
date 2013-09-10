@@ -11,7 +11,9 @@ var app = require('cantina')
 app.conf.add({
   emails: {
     transport: 'Stub',
-    root: './email/templates'
+    templates: {
+      root: './emails/templates'
+    }
   }
 });
 
@@ -76,7 +78,7 @@ app.emails.send = function (name, vars, cb) {
 };
 
 // Load templates.
-var root = path.resolve(app.root, conf.root);
+var root = path.resolve(app.root, conf.templates.root);
 if (fs.existsSync(root)) {
   glob.sync('**/*.md', {cwd: root}).forEach(function (file) {
     var template = loadTemplate(path.resolve(root, file), 'text');

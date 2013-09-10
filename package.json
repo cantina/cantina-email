@@ -4,9 +4,18 @@
   "private": true,
   "description": "Email sending and templating for Cantina applications.",
   "main": "cantina-emails.js",
-  "dependencies": {},
+  "dependencies": {
+    "handlebars": "~1.0.12",
+    "nodemailer": "~0.5.2",
+    "saw": "~0.5.2",
+    "yaml-front-matter": "~2.1.0",
+    "marked": "~0.2.9",
+    "glob": "~3.2.6",
+    "underscore": "~1.5.2"
+  },
   "devDependencies": {
-    "mocha": "~1.12.0"
+    "mocha": "~1.12.0",
+    "cantina": "cantina/cantina#3.x"
   },
   "scripts": {
     "test": "make test"

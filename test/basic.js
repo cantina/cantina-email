@@ -29,7 +29,7 @@ describe('basic test', function () {
   });
 
   it('can load and parse templates', function () {
-    var template = app.emails.templates.test;
+    var template = app.email.templates.test;
     assert.equal(template.to(vars), 'Dude <dude@thedude.com>');
     assert.equal(template.text(vars), '\n' +
       'Hey Dude,\n' +
@@ -45,13 +45,13 @@ describe('basic test', function () {
   });
 
   it('can send', function (done) {
-    app.emails.send('test', vars, function (err) {
+    app.email.send('test', vars, function (err) {
       var email;
 
       assert.ifError(err);
-      assert.equal(app.emails.sent.length, 1);
+      assert.equal(app.email.sent.length, 1);
 
-      email = app.emails.sent.pop();
+      email = app.email.sent.pop();
       assert.equal(email.envelope.stamp, 'Postage paid, Par Avion');
 
       done();

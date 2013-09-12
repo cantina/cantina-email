@@ -9,16 +9,16 @@ var app = require('cantina')
 
 // Default conf.
 app.conf.add({
-  emails: {
+  email: {
     transport: 'Stub',
     templates: {
-      root: './emails/templates'
+      root: './email/templates'
     }
   }
 });
 
 // Get conf.
-var conf = app.conf.get('emails');
+var conf = app.conf.get('email');
 
 // Create mailer if one doesn't exist.
 if (!app.mailer) {
@@ -26,12 +26,12 @@ if (!app.mailer) {
 }
 
 // Setup API.
-app.emails = app.emails || {};
-app.emails.templates = {};
-app.emails.sent = [];
+app.email = app.email || {};
+app.email.templates = {};
+app.email.sent = [];
 
 // Send an email.
-app.emails.send = function (name, vars, cb) {
+app.email.send = function (name, vars, cb) {
   if (typeof vars === 'function') {
     cb = vars;
     vars = {};
@@ -40,7 +40,7 @@ app.emails.send = function (name, vars, cb) {
   app.hook('emails:send:before').run(name, vars, function (err) {
 
     // Get template.
-    var template = app.emails.templates[name];
+    var template = app.email.templates[name];
     if (!template) return cb(new Error('email template not found: ' + name));
 
     // Prepare email.
@@ -60,7 +60,7 @@ app.emails.send = function (name, vars, cb) {
       if (err) return cb(err);
 
       if (resp && process.env.NODE_ENV !== 'production') {
-        app.emails.sent.push(resp);
+        app.email.sent.push(resp);
       }
 
       app.log('email', {
@@ -87,6 +87,6 @@ if (fs.existsSync(root)) {
         template[k] = handlebars.compile(template[k]);
       }
     });
-    app.emails.templates[file.replace(/\.md$/, '')] = template;
+    app.email.templates[file.replace(/\.md$/, '')] = template;
   });
 }

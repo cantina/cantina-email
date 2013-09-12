@@ -1,4 +1,4 @@
-cantina-emails
+cantina-email
 ==============
 
 Email sending and templating for Cantina applications.
@@ -7,14 +7,14 @@ Email sending and templating for Cantina applications.
 Provides
 --------
 
-- **app.emails.send (name, vars, cb)** - Send an email using a named template.
+- **app.email.send (name, vars, cb)** - Send an email using a named template.
 
 Hooks
 -----
 
-- **emails:send:before (name, vars, cb)** - An email is about to be sent. you can
+- **email:send:before (name, vars, cb)** - An email is about to be sent. you can
   modify the variables by reference.
-- **emails:send:after (name, vars, email, response, cb)** - An email was just
+- **email:send:after (name, vars, email, response, cb)** - An email was just
   sent.
 
 Configuration
@@ -23,10 +23,10 @@ Configuration
 **Defaults**
 
 ```js
-emails: {
+email: {
   transport: 'Stub',
   templates: {
-    root: './emails/templates'
+    root: './email/templates'
   }
 }
 ```
@@ -42,11 +42,11 @@ Templates are markdown files with yaml front-matter.
 ---
 to: '{{{to.name}}} <{{{to.email}}}>'
 from: '{{{from.name}}} <{{{from.email}}}>'
-subject: 'Cantina Emails: Example'
+subject: 'Cantina Email: Example'
 ---
 Hey {{to.name}},
 
-This is an example of cantina-emails. It is the most {{adjective}} email sending
+This is an example of cantina-email. It is the most {{adjective}} email sending
 module out there.
 
 Regards,

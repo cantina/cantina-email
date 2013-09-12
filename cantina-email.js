@@ -37,7 +37,7 @@ app.email.send = function (name, vars, cb) {
     vars = {};
   }
 
-  app.hook('emails:send:before').run(name, vars, function (err) {
+  app.hook('email:send:before').run(name, vars, function (err) {
 
     // Get template.
     var template = app.email.templates[name];
@@ -72,7 +72,7 @@ app.email.send = function (name, vars, cb) {
         variables: vars
       });
 
-      app.hook('emails:send:after').run(name, vars, email, resp, cb);
+      app.hook('email:send:after').run(name, vars, email, resp, cb);
     });
   });
 };

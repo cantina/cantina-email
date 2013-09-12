@@ -57,4 +57,18 @@ describe('basic test', function () {
       done();
     });
   });
+
+  it('can use the before and after hooks', function (done) {
+    app.hook('email:send:before').add(function (name, vars, next) {
+      vars.adjective = 'super';
+      next();
+    });
+    app.hook('email:send:after').add(function (name, vars, email, resp, next) {
+      assert.equal(vars.adjective, 'super');
+      done();
+    });
+    app.email.send('test', vars, function (err) {
+      assert.ifError(err);
+    });
+  });
 });

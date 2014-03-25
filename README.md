@@ -8,6 +8,8 @@ Provides
 --------
 
 - **app.email.send (name, vars, cb)** - Send an email using a named template.
+- **app.email.registerTemplateDir (namespace, templateDir)** - Register an additional directory
+  to load templates from. The template names will be namespaced by the first argument.
 
 Hooks
 -----

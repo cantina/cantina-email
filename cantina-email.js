@@ -7,6 +7,11 @@ var app = require('cantina')
   , marked = require('marked')
   , glob = require('glob');
 
+// Load templates on app start
+app.hook('start').add(function (done) {
+  app.hook('email:load:templates').runSeries(done);
+});
+
 // Default conf.
 app.conf.add({
   email: {
@@ -77,36 +82,22 @@ app.email.send = function (name, vars, cb) {
   });
 };
 
-// Allow other plugins to register additional template directories.
-app.email.registerTemplateDir = function (namespace, templateDir) {
-  if (fs.existsSync(templateDir)) {
-    glob.sync('**/*.md', {cwd: templateDir}).forEach(function (file) {
-
-      //Don't override root templates if there is a namespace collision
-      var namespaced_name = namespace + '/' + file.replace(/\.md$/, '');
-      if (app.email.templates[namespaced_name]) return;
-
-      var template = loadTemplate(path.resolve(root, file), 'text');
+app.email._loadTemplateDir = function (dir) {
+  if (fs.existsSync(dir)) {
+    glob.sync('**/*.md', {cwd: dir}).forEach(function (file) {
+      var template = loadTemplate(path.resolve(dir, file), 'text');
       Object.keys(template).forEach(function (k) {
         if (typeof template[k] === 'string') {
           template[k] = handlebars.compile(template[k]);
         }
       });
-      app.email.templates[namespaced_name] = template;
+      app.email.templates[file.replace(/\.md$/, '')] = template;
     });
   }
 };
 
-// Load templates.
-var root = path.resolve(app.root, conf.templates.root);
-if (fs.existsSync(root)) {
-  glob.sync('**/*.md', {cwd: root}).forEach(function (file) {
-    var template = loadTemplate(path.resolve(root, file), 'text');
-    Object.keys(template).forEach(function (k) {
-      if (typeof template[k] === 'string') {
-        template[k] = handlebars.compile(template[k]);
-      }
-    });
-    app.email.templates[file.replace(/\.md$/, '')] = template;
-  });
-}
+app.hook('email:load:templates').last(function (done) {
+  // Load root templates.
+  app.email._loadTemplateDir(path.resolve(app.root, conf.templates.root));
+  done();
+});

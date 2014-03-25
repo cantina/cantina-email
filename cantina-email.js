@@ -77,6 +77,26 @@ app.email.send = function (name, vars, cb) {
   });
 };
 
+// Allow other plugins to register additional template directories.
+app.email.registerTemplateDir = function (namespace, templateDir) {
+  if (fs.existsSync(templateDir)) {
+    glob.sync('**/*.md', {cwd: templateDir}).forEach(function (file) {
+
+      //Don't override root templates if there is a namespace collision
+      var namespaced_name = namespace + '/' + file.replace(/\.md$/, '');
+      if (app.email.templates[namespaced_name]) return;
+
+      var template = loadTemplate(path.resolve(root, file), 'text');
+      Object.keys(template).forEach(function (k) {
+        if (typeof template[k] === 'string') {
+          template[k] = handlebars.compile(template[k]);
+        }
+      });
+      app.email.templates[namespaced_name] = template;
+    });
+  }
+};
+
 // Load templates.
 var root = path.resolve(app.root, conf.templates.root);
 if (fs.existsSync(root)) {

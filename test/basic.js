@@ -59,16 +59,43 @@ describe('basic test', function () {
   });
 
   it('can use the before and after hooks', function (done) {
+    var calledOnce = false;
     app.hook('email:send:before').add(function (name, vars, next) {
       vars.adjective = 'super';
       next();
     });
     app.hook('email:send:after').add(function (name, vars, email, resp, next) {
       assert.equal(vars.adjective, 'super');
-      done();
+
+      // Only call done() once. Otherwise the following test will invoke this
+      // and cause an error.
+      if (!calledOnce) {
+        calledOnce = true;
+        done();
+      }
+      else {
+        next();
+      }
     });
     app.email.send('test', vars, function (err) {
       assert.ifError(err);
+    });
+  });
+
+  it('can register additional template directories', function (done) {
+
+    //Register the template dir
+    var path = require('path').resolve(__dirname, './plugin_email/templates');
+    app.email.registerTemplateDir('plugin', path);
+
+    // Ensure the template exists
+    assert(app.email.templates['plugin/test2']);
+
+    // Ensure an email can be sent
+    app.email.send('plugin/test2', vars, function (err) {
+      assert.ifError(err);
+      assert.equal(app.email.sent.length, 2);
+      done();
     });
   });
 });

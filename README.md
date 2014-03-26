@@ -8,10 +8,16 @@ Provides
 --------
 
 - **app.email.send (name, vars, cb)** - Send an email using a named template.
+- **app.email.loadTemplates (templateDir, weight)** - Add a loader to the hook
+  `email:load:templates` which will load email templates from an
+  additional directory, with an optional weight.
 
 Hooks
 -----
 
+- **email:load:templates (cb)** - The templates are being loaded onto
+  `app.email.templates`. Plugins can hook in here to add their own
+  directory in addition to the app root dir.
 - **email:send:before (name, vars, cb)** - An email is about to be sent. you can
   modify the variables by reference.
 - **email:send:after (name, vars, email, response, cb)** - An email was just

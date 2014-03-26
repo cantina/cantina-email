@@ -81,31 +81,23 @@ app.email.send = function (name, vars, cb) {
     });
   });
 };
-
-function loadTemplateDir (dir, cb) {
-  if (fs.existsSync(dir)) {
-    glob.sync('**/*.md', {cwd: dir}).forEach(function (file) {
-      var template = loadTemplate(path.resolve(dir, file), 'text');
-      Object.keys(template).forEach(function (k) {
-        if (typeof template[k] === 'string') {
-          template[k] = handlebars.compile(template[k]);
-        }
-      });
-      app.email.templates[file.replace(/\.md$/, '')] = template;
-    });
-  }
-  cb();
-}
-
 app.email.loadTemplates = function (dir, weight) {
-  if (weight) {
-    app.hook('email:load:templates').add(weight, loadTemplateDir.bind(null, dir));
-  }
-  else {
-    app.hook('email:load:templates').add(loadTemplateDir.bind(null, dir));
-  }
+  app.hook('email:load:templates').add(weight || 0, function loadTemplateDir (done) {
+      if (fs.existsSync(dir)) {
+        glob.sync('**/*.md', {cwd: dir}).forEach(function (file) {
+          var template = loadTemplate(path.resolve(dir, file), 'text');
+          Object.keys(template).forEach(function (k) {
+            if (typeof template[k] === 'string') {
+              template[k] = handlebars.compile(template[k]);
+            }
+          });
+          app.email.templates[file.replace(/\.md$/, '')] = template;
+        });
+      }
+      done();
+    }
+  );
 };
 
 // Load root templates.
-var rootDir = path.resolve(app.root, conf.templates.root);
-app.hook('email:load:templates').last(loadTemplateDir.bind(null, rootDir));
+app.email.loadTemplates(path.resolve(app.root, conf.templates.root), 100);

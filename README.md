@@ -8,12 +8,15 @@ Provides
 --------
 
 - **app.email.send (name, vars, cb)** - Send an email using a named template.
-- **app.email.registerTemplateDir (namespace, templateDir)** - Register an additional directory
-  to load templates from. The template names will be namespaced by the first argument.
+- **app.email.loadTemplates (templateDir)** - Load email templates from an
+  additional directory.
 
 Hooks
 -----
 
+- **email:load:templates (cb)** - The templates are being loaded onto
+  `app.email.templates`. Plugins can hook in here to add their own
+  directory in addition to the app root dir.
 - **email:send:before (name, vars, cb)** - An email is about to be sent. you can
   modify the variables by reference.
 - **email:send:after (name, vars, email, response, cb)** - An email was just

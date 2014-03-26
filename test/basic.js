@@ -23,7 +23,8 @@ describe('basic test', function () {
       app.hook('email:load:templates').add(function (done) {
 
         //Register the extra template dir
-        app.email._loadTemplateDir(require('path').resolve(__dirname, './plugin_email/templates'));
+        app.email.loadTemplates(require('path').resolve(__dirname, './plugin_email/templates'));
+        done();
       });
 
       app.start(done);
@@ -91,10 +92,10 @@ describe('basic test', function () {
   it('can register additional template directories', function (done) {
 
     // Ensure the template exists
-    assert(app.email.templates['test2']);
+    assert(app.email.templates['subdir/test2']);
 
     // Ensure an email can be sent
-    app.email.send('test2', vars, function (err) {
+    app.email.send('subdir/test2', vars, function (err) {
       assert.ifError(err);
       assert.equal(app.email.sent.length, 2);
       done();

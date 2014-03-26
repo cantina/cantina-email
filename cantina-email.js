@@ -82,7 +82,7 @@ app.email.send = function (name, vars, cb) {
   });
 };
 
-app.email._loadTemplateDir = function (dir) {
+app.email.loadTemplates = function (dir) {
   if (fs.existsSync(dir)) {
     glob.sync('**/*.md', {cwd: dir}).forEach(function (file) {
       var template = loadTemplate(path.resolve(dir, file), 'text');
@@ -98,6 +98,6 @@ app.email._loadTemplateDir = function (dir) {
 
 app.hook('email:load:templates').last(function (done) {
   // Load root templates.
-  app.email._loadTemplateDir(path.resolve(app.root, conf.templates.root));
+  app.email.loadTemplates(path.resolve(app.root, conf.templates.root));
   done();
 });

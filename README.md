@@ -8,8 +8,9 @@ Provides
 --------
 
 - **app.email.send (name, vars, cb)** - Send an email using a named template.
-- **app.email.loadTemplates (templateDir)** - Load email templates from an
-  additional directory.
+- **app.email.loadTemplates (templateDir, weight)** - Add a loader to the hook
+  `email:load:templates` which will load email templates from an
+  additional directory, with an optional weight.
 
 Hooks
 -----

@@ -20,12 +20,8 @@ describe('basic test', function () {
       app.silence();
       require('../');
 
-      app.hook('email:load:templates').add(function (done) {
-
-        //Register the extra template dir
-        app.email.loadTemplates(require('path').resolve(__dirname, './plugin_email/templates'));
-        done();
-      });
+      //Register the extra template dir
+      app.email.loadTemplates(require('path').resolve(__dirname, './plugin_email/templates'));
 
       app.start(done);
     });

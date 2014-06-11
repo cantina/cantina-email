@@ -7,18 +7,10 @@ var app = require('cantina')
   , marked = require('marked')
   , glob = require('glob');
 
-// Load templates on app start
-app.hook('start').add(function (done) {
-  app.hook('email:load:templates').runSeries(done);
-});
-
 // Default conf.
 app.conf.add({
   email: {
-    transport: 'Stub',
-    templates: {
-      root: './email/templates'
-    }
+    transport: 'Stub'
   }
 });
 
@@ -81,23 +73,16 @@ app.email.send = function (name, vars, cb) {
     });
   });
 };
-app.email.loadTemplates = function (dir, weight) {
-  app.hook('email:load:templates').add(weight || 0, function loadTemplateDir (done) {
-      if (fs.existsSync(dir)) {
-        glob.sync('**/*.md', {cwd: dir}).forEach(function (file) {
-          var template = loadTemplate(path.resolve(dir, file), 'text');
-          Object.keys(template).forEach(function (k) {
-            if (typeof template[k] === 'string') {
-              template[k] = handlebars.compile(template[k]);
-            }
-          });
-          app.email.templates[file.replace(/\.md$/, '')] = template;
-        });
-      }
-      done();
-    }
-  );
-};
 
-// Load root templates.
-app.email.loadTemplates(path.resolve(app.root, conf.templates.root), 100);
+// Register a loader for email templates.
+app.loader('email', {dir: 'email/templates'}, function (options) {
+  glob.sync('**/*.md', {cwd: options.path}).forEach(function (file) {
+    var template = loadTemplate(path.resolve(options.path, file), 'text');
+    Object.keys(template).forEach(function (k) {
+      if (typeof template[k] === 'string') {
+        template[k] = handlebars.compile(template[k]);
+      }
+    });
+    app.email.templates[file.replace(/\.md$/, '')] = template;
+  });
+});

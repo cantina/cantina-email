@@ -20,8 +20,11 @@ describe('basic test', function () {
       app.silence();
       require('../');
 
-      //Register the extra template dir
-      app.email.loadTemplates(require('path').resolve(__dirname, './plugin_email/templates'));
+      // Load extra email templates.
+      app.load('email', {dir: 'plugin_email/templates'});
+
+      // Load email templates.
+      app.load('email');
 
       app.start(done);
     });

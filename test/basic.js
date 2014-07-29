@@ -13,12 +13,12 @@ describe('basic test', function () {
     };
 
   before(function (done) {
-    app = require('cantina');
+    app = require('cantina').createApp();
     app.boot(function (err) {
       assert.ifError(err);
 
       app.silence();
-      require('../');
+      app.require('../');
 
       // Load extra email templates.
       app.load('email', {dir: 'plugin_email/templates'});

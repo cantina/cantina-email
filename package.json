@@ -1,9 +1,6 @@
 {
   "name": "cantina-email",
   "version": "4.1.0",
-  "publishConfig": {
-    "registry": "https://npm-registry.terraeclipse.com"
-  },
   "description": "Email sending and templating for Cantina applications.",
   "main": "cantina-email.js",
   "dependencies": {
@@ -27,15 +24,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/cpsubrian/cantina-email.git"
+    "url": "git://github.com/cantina/cantina-email.git"
   },
-  "homepage": "https://github.com/cpsubrian/cantina-email",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  ],
   "keywords": [
     "cantina",
     "email"
   ],
   "author": "Brian Link <cpsubrian@gmail.com>",
   "bugs": {
-    "url": "https://github.com/cpsubrian/cantina-email/issues"
+    "url": "https://github.com/cantina/cantina-email/issues"
   }
 }

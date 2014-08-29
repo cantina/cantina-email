@@ -14,10 +14,10 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "cantina": "~4.1.0"
+    "cantina": "^4.1.0"
   },
   "peerDependencies": {
-    "cantina": "~4.1.0"
+    "cantina": "^4.1.0"
   },
   "scripts": {
     "test": "make test"
